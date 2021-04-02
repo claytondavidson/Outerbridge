@@ -1,0 +1,15 @@
+(
+    axes: {
+        Vertical: Emulated(
+            pos: Key(Right),
+            neg: Key(Left),
+        ),
+        Horizontal: Emulated(
+            pos: Key(Up),
+            neg: Key(Down),
+        ),
+    },
+    actions: {
+        Shoot: [[Mouse(Left)]],
+    },
+)

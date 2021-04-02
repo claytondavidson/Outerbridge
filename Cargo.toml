@@ -1,0 +1,20 @@
+[package]
+name = "outerbridge"
+version = "0.1.0"
+authors = ["Clayton Davidson <clayton.davidson847@topper.wku.edu>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+amethyst = "0.15.3"
+tiled = "0.9.4"
+rand = "0.8.3"
+serde = { version = "1.0", features = ["derive"] }
+
+[features]
+default = ["vulkan", "tiles"]
+empty = ["amethyst/empty"]
+metal = ["amethyst/metal"]
+vulkan = ["amethyst/vulkan"]
+tiles = ["amethyst/tiles"]
