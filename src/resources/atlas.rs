@@ -6,6 +6,7 @@ use rand::{Rng, thread_rng};
 use std::cmp::{max, min};
 use crate::entities::TileType;
 use amethyst::assets::AssetStorage;
+use crate::utils::Algorithm2D;
 
 #[derive(Clone)]
 pub struct Rect {
@@ -157,11 +158,14 @@ fn roll_dice(n: i32, die_type: i32) -> i32 {
 }
 
 pub fn draw_atlas(world: &mut World) {
-    let atlas = Atlas::new_atlas_with_rooms_and_stuff();
-    world.insert(atlas.clone());
+
+    let tiles = {
+        let atlas = world.read_resource::<Atlas>();
+        atlas.tiles.clone()
+    };
 
     let mut counter = 0;
-    for tile in &atlas.tiles {
+    for tile in &tiles {
         print!("type: {:?} idx: {} ", tile, counter);
         counter += 1;
     }
@@ -172,7 +176,7 @@ pub fn draw_atlas(world: &mut World) {
 
     let mut counter = 0;
 
-    for (_idx, tile) in atlas.tiles.iter().enumerate() {
+    for (idx, tile) in tiles.iter().enumerate() {
         let grass = world.read_resource::<SpriteResource>().get(Sprite::Grass).unwrap();
         let wall = world.read_resource::<SpriteResource>().get(Sprite::Wall).unwrap();
         let grass_render = SpriteRender::new(grass, 0);
@@ -180,7 +184,6 @@ pub fn draw_atlas(world: &mut World) {
         let mut transform = Transform::default();
 
         transform.set_translation_xyz(x, y, 0.0);
-
         match tile {
             TileType::Grass => {
                 world
@@ -188,7 +191,7 @@ pub fn draw_atlas(world: &mut World) {
                     .with(grass_render)
                     .with(transform)
                     .build();
-            }
+                }
             TileType::Wall => {
                 world
                     .create_entity()
@@ -208,4 +211,15 @@ pub fn draw_atlas(world: &mut World) {
     }
     println!("{}", counter);
     println!("done");
+}
+
+pub struct Point {
+    width: i32,
+    height: i32,
+}
+
+impl Point {
+    pub fn new(width: i32, height: i32) -> Self {
+        Self { width, height }
+    }
 }

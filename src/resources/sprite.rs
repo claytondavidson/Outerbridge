@@ -21,6 +21,7 @@ pub enum Sprite {
     Grass,
     Player,
     Wall,
+    Monster,
 }
 
 impl SpriteResource {
@@ -36,6 +37,7 @@ impl SpriteResource {
         resource.load(Sprite::Grass, &loader, &textures, &sprites);
         resource.load(Sprite::Player, &loader, &textures, &sprites);
         resource.load(Sprite::Wall, &loader, &textures, &sprites);
+        resource.load(Sprite::Monster, &loader, &textures, &sprites);
 
         resource
     }
@@ -83,6 +85,7 @@ impl Sprite {
             Self::Grass => &"terrain/grass",
             Self::Player => &"terrain/player",
             Self::Wall => &"terrain/wall",
+            Self::Monster => &"terrain/monster",
         };
     }
 }

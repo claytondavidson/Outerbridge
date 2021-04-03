@@ -12,9 +12,10 @@ mod states;
 mod resources;
 mod entities;
 mod systems;
+mod utils;
 
 use crate::entities::Terrain;
-use crate::systems::MovementSystem;
+use crate::systems::{MovementSystem};
 use crate::systems::CameraFollowSystem;
 use crate::systems::MovementBindingTypes;
 use amethyst::input::{InputBundle};

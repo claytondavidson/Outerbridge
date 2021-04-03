@@ -13,11 +13,12 @@ use crate::systems::PlayerTag;
 use crate::systems::CameraTag;
 //use rand::prelude::*;
 use crate::resources::*;
+use crate::entities::View;
 
 #[derive(Component)]
-struct Position {
-    _x: i32,
-    _y: i32,
+pub struct Position {
+    x: i32,
+    y: i32,
 }
 
 pub struct GameState;
@@ -25,24 +26,31 @@ pub struct GameState;
 impl SimpleState for GameState {
     fn on_start(&mut self, data: StateData<GameData>) {
         data.world.insert(SpriteResource::new(&data.world));
+        data.world.insert(Atlas::new_atlas_with_rooms_and_stuff());
+        data.world.insert(View::new());
 
         initialize_camera(data.world);
         create_player(data.world);
+        create_monsters(data.world);
         draw_atlas(data.world);
     }
 }
 
 pub fn create_player(world: &mut World) {
-    //let atlas = world.read_resource::<Atlas>();
+    let rooms = {
+        let atlas = world.read_resource::<Atlas>();
+        atlas.rooms.clone()
+    };
+
     let sprite = world.read_resource::<SpriteResource>().get(Sprite::Player).unwrap();
     let sprite_render = SpriteRender::new(sprite, 0);
     let player_tag = PlayerTag::default();
 
     let mut transform = Transform::default();
 
-   // let (x, y) = atlas.rooms[0].center();
+   let (x, y) = rooms[0].center();
 
-    transform.set_translation_xyz(40.0, 25.0, 0.0);
+    transform.set_translation_xyz(x as f32, y as f32, 0.0);
     world
         .create_entity()
         .with(Player{})
@@ -74,6 +82,29 @@ pub fn create_player(world: &mut World) {
         .with(transform)
         .build();
 }*/
+
+fn create_monsters(world: &mut World) {
+    let rooms = {
+        let atlas = world.read_resource::<Atlas>();
+        atlas.rooms.clone()
+    };
+
+    for room in rooms.iter().skip(1) {
+        let (x, y) = room.center();
+
+        let mut transform = Transform::default();
+        transform.set_translation_xyz(x as f32, y as f32, 0.0);
+
+        let sprite = world.read_resource::<SpriteResource>().get(Sprite::Monster).unwrap();
+        let sprite_render = SpriteRender::new(sprite, 0);
+
+        world
+            .create_entity()
+            .with(transform)
+            .with(sprite_render)
+            .build();
+    }
+}
 
 fn initialize_camera(world: &mut World) {
     let mut transform = Transform::default();

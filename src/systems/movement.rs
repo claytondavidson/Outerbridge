@@ -7,7 +7,6 @@ use amethyst::{
 use amethyst::core::ecs::NullStorage;
 use crate::systems::{MovementBindingTypes, AxisBinding};
 use crate::resources::{Atlas};
-use std::cmp::{max, min};
 use crate::entities::TileType;
 
 pub struct Player {
@@ -23,6 +22,8 @@ impl Player {
 impl Component for Player {
     type Storage = DenseVecStorage<Self>;
 }
+
+
 
 #[derive(Default)]
 pub struct PlayerTag;
@@ -54,10 +55,22 @@ impl<'s> System<'s> for MovementSystem {
             let mut player_x = 0.0;
             let mut player_y = 0.0;
 
-            player_x = transform.translation().x;
-            player_y = transform.translation().y;
+            let trans_x = if vertical == 1. {
+                0.
+            } else {
+                1.
+            };
 
-            let destination_idx = atlas.xy_idx((player_x + vertical).floor() as i32, (player_y + horizontal) as i32);
+            let trans_y = if horizontal == 1. {
+                0.
+            } else {
+                1.
+            };
+
+            player_x = transform.translation().x + trans_x;
+            player_y = transform.translation().y + trans_y;
+
+            let destination_idx = atlas.xy_idx((player_x + vertical).floor() as i32, (player_y + horizontal).floor() as i32);
             //println!("{} {} {}", horizontal, vertical, destination_idx);
             println!("{} {}", player_x, player_y);
             println!("index: {}", destination_idx);
