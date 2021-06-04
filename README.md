@@ -1,5 +1,5 @@
 # outerbridge
-A wip rpg
+A work-in-progress randomly generated role-playing game.
 
 # screenshots and gifs
 ![map gen #1](https://i.imgur.com/Fj9Vmxv.png)
